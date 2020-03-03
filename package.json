@@ -1,0 +1,23 @@
+{
+  "name": "fixinglibrix",
+  "version": "1.0.0",
+  "description": "arreglando las ñapillas del equipo de diversificacion",
+  "main": "librixPostman.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Soukt/fixingLibrix.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Soukt/fixingLibrix/issues"
+  },
+  "homepage": "https://github.com/Soukt/fixingLibrix#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.5.4"
+  }
+}
