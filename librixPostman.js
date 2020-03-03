@@ -2,16 +2,18 @@ const express = require("express");
 const app = express();
 const port = 8888;
 var MongoClient = require('mongodb').MongoClient;
+var bodyParser = require("body-parser");
+var jsonParser = bodyParser.json();
 var url = "mongodb://localhost:27017/";
 var librixJson = {
-    gender: "humor",
-    title: "shhhhhh me rio mucho",
-    style: "realista"
+    gender: "husdgsdgsdfsdfmor",
+    title: "asdasdasdasd me rio mucho",
+    style: "asdasdasd"
 }
 
 // app.get('/', (req, res) =>
 // res.send(url) 
-function getAll() {
+function sacarLibros() {
     MongoClient.connect(url, function (err, db) {
 
         var dbo = db.db("librix");
@@ -30,7 +32,7 @@ function getAll() {
     })
 }
 
-function get(search) {
+function encontrarLibro(search) {
     MongoClient.connect(url, function (err, db) {
 
 
@@ -50,29 +52,51 @@ function get(search) {
     })
 }
 
-function post(add) {
+function meterLibro(add) {
     MongoClient.connect(url, function (err, db) {
 
         var dbo = db.db("librix");
-        if (err) throw err;
+        //if (err) throw err;
+        if (err) return false;
         // db.getCollection('libricos').find({});
         dbo.collection("libricos").insertOne(add, function (err, result) {
             console.log("amo a postear")
 
             //dbo.collection('libricos').find({}, librixJson).toArray(function (err, result) {
-            if (err) throw err;
+            //if (err) throw err;
+            if (err) return false;
             console.log("insertado")
 
             db.close();
         });
 
     })
+
+    return true;
 }
+app.post("/", jsonParser, function (req, res) {
+    if (!req.body) return res.sendStatus(400);
+    console.log(req.body)
+    // res.send(req.body)
+    var libro = req.body;
 
-post(librixJson);
-getAll();
+    let message;
 
-get({
-    gender: "policiaco"
-})
+    if (meterLibro(libro)) {
+        message = "ok";
+    } else {
+        message = "error";
+    }
+
+    res.json({
+        result: message
+    });
+
+    // meterLibro(req);
+});
+// getAll();
+//meterLibro(librixJson);
+// get({
+//     gender: "policiaco"
+// })
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
