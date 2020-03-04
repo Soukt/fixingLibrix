@@ -5,15 +5,16 @@ var MongoClient = require('mongodb').MongoClient;
 var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
 var url = "mongodb://localhost:27017/";
-var librixJson = {
-    gender: "husdgsdgsdfsdfmor",
-    title: "asdasdasdasd me rio mucho",
-    style: "asdasdasd"
-}
 
-// app.get('/', (req, res) =>
-// res.send(url) 
-function sacarLibros() {
+// var librixJson = {
+//     gender: "husdgsdgsdfsdfmor",
+//     title: "asdasdasdasd me rio mucho",
+//     style: "asdasdasd"
+// }
+
+function sacarLibros(res) {
+
+
     MongoClient.connect(url, function (err, db) {
 
         var dbo = db.db("librix");
@@ -21,15 +22,20 @@ function sacarLibros() {
 
         // db.getCollection('libricos').find({});
         dbo.collection("libricos").find({}).toArray(function (err, result) {
+            console.log("hola")
 
             //dbo.collection('libricos').find({}, librixJson).toArray(function (err, result) {
             if (err) throw err;
             console.log("Aqui esta toda la DB")
-            console.log(result)
-            db.close();
-        });
+            // console.log(result)
 
-    })
+            db.close();
+
+            res.send(result);
+
+            // this.setState(result)
+        });
+    });
 }
 
 function encontrarLibro(search) {
@@ -39,12 +45,10 @@ function encontrarLibro(search) {
         var dbo = db.db("librix");
         if (err) throw err;
 
-        // db.getCollection('libricos').find({});
         dbo.collection("libricos").find(search).toArray(function (err, result) {
 
-            //dbo.collection('libricos').find({}, librixJson).toArray(function (err, result) {
             if (err) throw err;
-            console.log("Aqui estan los resultados del find gender policiaco")
+            console.log("Aqui estan los resultados del find genre policiaco")
             console.log(result)
             db.close();
         });
@@ -56,14 +60,10 @@ function meterLibro(add) {
     MongoClient.connect(url, function (err, db) {
 
         var dbo = db.db("librix");
-        //if (err) throw err;
         if (err) return false;
-        // db.getCollection('libricos').find({});
         dbo.collection("libricos").insertOne(add, function (err, result) {
             console.log("amo a postear")
 
-            //dbo.collection('libricos').find({}, librixJson).toArray(function (err, result) {
-            //if (err) throw err;
             if (err) return false;
             console.log("insertado")
 
@@ -74,10 +74,12 @@ function meterLibro(add) {
 
     return true;
 }
-app.post("/", jsonParser, function (req, res) {
+app.get("/getbooks", async function (req, res) {
+    sacarLibros(res);
+})
+app.post("/addbooks", jsonParser, function (req, res) {
     if (!req.body) return res.sendStatus(400);
     console.log(req.body)
-    // res.send(req.body)
     var libro = req.body;
 
     let message;
@@ -92,11 +94,6 @@ app.post("/", jsonParser, function (req, res) {
         result: message
     });
 
-    // meterLibro(req);
 });
-// getAll();
-//meterLibro(librixJson);
-// get({
-//     gender: "policiaco"
-// })
+// sacarLibros();
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
