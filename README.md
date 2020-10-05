@@ -1,2 +1,3 @@
 # fixingLibrix
-arreglando las ñapillas del equipo de diversificacion
+
+esto es un fork, lo estoy haciendo con mi cuenta secundaria de github!
